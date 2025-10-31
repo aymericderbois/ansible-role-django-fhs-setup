@@ -36,9 +36,27 @@
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
   loop:
-    - { path: "/opt/{{ django_fhs_setup_app_name }}", mode: "0750", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
-    - { path: "/var/log/{{ django_fhs_setup_app_name }}", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
-    - { path: "/var/opt/{{ django_fhs_setup_app_name }}", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
-    - { path: "/srv/{{ django_fhs_setup_app_name }}", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
-    - { path: "/srv/{{ django_fhs_setup_app_name }}/media", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
-    - { path: "/etc/opt/{{ django_fhs_setup_app_name }}", mode: "0750", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
+    - path: "/opt/{{ django_fhs_setup_app_name }}"
+      mode: "0750"
+      owner: "{{ django_fhs_setup_deployment_user }}"
+      group: "{{ django_fhs_setup_app_name }}"
+    - path: "/var/log/{{ django_fhs_setup_app_name }}"
+      mode: "0770"
+      owner: "{{ django_fhs_setup_deployment_user }}"
+      group: "{{ django_fhs_setup_app_name }}"
+    - path: "/var/opt/{{ django_fhs_setup_app_name }}"
+      mode: "0770"
+      owner: "{{ django_fhs_setup_deployment_user }}"
+      group: "{{ django_fhs_setup_app_name }}"
+    - path: "/srv/{{ django_fhs_setup_app_name }}"
+      mode: "0770"
+      owner: "{{ django_fhs_setup_deployment_user }}"
+      group: "{{ django_fhs_setup_app_name }}"
+    - path: "/srv/{{ django_fhs_setup_app_name }}/media"
+      mode: "0770"
+      owner: "{{ django_fhs_setup_deployment_user }}"
+      group: "{{ django_fhs_setup_app_name }}"
+    - path: "/etc/opt/{{ django_fhs_setup_app_name }}"
+      mode: "0750"
+      owner: "{{ django_fhs_setup_deployment_user }}"
+      group: "{{ django_fhs_setup_app_name }}"
