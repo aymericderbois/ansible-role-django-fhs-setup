@@ -1,0 +1,44 @@
+---
+- name: Ensure django_fhs_setup_app_name is correctly defined
+  ansible.builtin.assert:
+    that:
+      - django_fhs_setup_app_name is defined
+      - django_fhs_setup_app_name | trim | length > 0
+    fail_msg: "The django_fhs_setup_app_name variable is not defined or is empty. Please define it correctly."
+    success_msg: "The django_fhs_setup_app_name variable is correctly defined: {{ django_fhs_setup_app_name }}"
+
+- name: Ensure system packages for Django are installed
+  ansible.builtin.apt:
+    name: "{{ django_fhs_setup_system_packages }}"
+    state: present
+    update_cache: true
+
+- name: Ensure application group is created
+  ansible.builtin.group:
+    name: "{{ django_fhs_setup_app_name }}"
+    state: present
+
+- name: Ensure application user exists
+  ansible.builtin.user:
+    name: "{{ django_fhs_setup_app_name }}"
+    group: "{{ django_fhs_setup_app_name }}"
+    home: "/opt/{{ django_fhs_setup_app_name }}"
+    create_home: false
+    state: present
+    shell: "{{ django_fhs_setup_user_shell }}"
+    password: '!'
+
+- name: Ensure application directories exist
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: "{{ item.mode }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+  loop:
+    - { path: "/opt/{{ django_fhs_setup_app_name }}", mode: "0750", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
+    - { path: "/var/log/{{ django_fhs_setup_app_name }}", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
+    - { path: "/var/opt/{{ django_fhs_setup_app_name }}", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
+    - { path: "/srv/{{ django_fhs_setup_app_name }}", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
+    - { path: "/srv/{{ django_fhs_setup_app_name }}/media", mode: "0770", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }
+    - { path: "/etc/opt/{{ django_fhs_setup_app_name }}", mode: "0750", owner: "{{ django_fhs_setup_deployment_user }}", group: "{{ django_fhs_setup_app_name }}" }

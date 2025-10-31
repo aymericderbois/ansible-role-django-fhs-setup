@@ -1,0 +1,55 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  vars:
+    django_fhs_setup_app_name: testapp
+
+  tasks:
+    - name: Check if application user exists
+      ansible.builtin.getent:
+        database: passwd
+        key: "{{ django_fhs_setup_app_name }}"
+      register: app_user
+
+    - name: Check if application group exists
+      ansible.builtin.getent:
+        database: group
+        key: "{{ django_fhs_setup_app_name }}"
+      register: app_group
+
+    - name: Check if required directories exist
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      register: dir_stats
+      loop:
+        - "/opt/{{ django_fhs_setup_app_name }}"
+        - "/etc/opt/{{ django_fhs_setup_app_name }}"
+        - "/var/opt/{{ django_fhs_setup_app_name }}"
+        - "/var/log/{{ django_fhs_setup_app_name }}"
+        - "/srv/{{ django_fhs_setup_app_name }}"
+        - "/srv/{{ django_fhs_setup_app_name }}/media"
+
+    - name: Assert all directories exist
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.isdir
+        fail_msg: "Directory {{ item.item }} does not exist or is not a directory"
+        success_msg: "Directory {{ item.item }} exists"
+      loop: "{{ dir_stats.results }}"
+
+    - name: Check if python3-dev is installed
+      ansible.builtin.dpkg_selections:
+        name: python3-dev
+        selection: install
+      check_mode: true
+      register: python3_dev
+
+    - name: Check if libpq-dev is installed
+      ansible.builtin.dpkg_selections:
+        name: libpq-dev
+        selection: install
+      check_mode: true
+      register: libpq_dev

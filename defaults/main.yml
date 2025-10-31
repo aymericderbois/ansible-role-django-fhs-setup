@@ -1,0 +1,7 @@
+---
+django_fhs_setup_system_packages:
+  - python3-dev
+  - libpq-dev
+
+django_fhs_setup_user_shell: /usr/sbin/nologin
+django_fhs_setup_deployment_user: debian  # User owner of all directories

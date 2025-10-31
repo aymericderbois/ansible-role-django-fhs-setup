@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  vars:
+    django_fhs_setup_app_name: testapp
+    django_fhs_setup_deployment_user: root
+
+  tasks:
+    - name: Include role
+      ansible.builtin.include_role:
+        name: ansible-role-django-fhs-setup
